@@ -1,0 +1,15 @@
+name: flutter_stories
+description: Widget that brings stories mechanism to your apps
+version: 0.2.1+1
+homepage: https://github.com/vanelizarov/flutter_stories
+
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
