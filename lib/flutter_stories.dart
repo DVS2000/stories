@@ -51,6 +51,8 @@ class Story extends StatefulWidget {
     this.onFlashBack,
     this.onLongPress,
     this.onLongPressEnd,
+    this.onNext,
+    this.onPreview,
     this.progressSegmentBuilder = Story.instagramProgressSegmentBuilder,
     this.progressSegmentGap = 2.0,
     this.progressOpacityDuration = const Duration(milliseconds: 300),
@@ -104,6 +106,9 @@ class Story extends StatefulWidget {
 
   final VoidCallback onLongPress;
   final VoidCallback onLongPressEnd;
+
+  final ValueChanged<int> onNext;
+  final ValueChanged<int> onPreview;
 
   ///
   /// Sets the ratio of left and right tappable portions
@@ -171,9 +176,8 @@ class _StoryState extends State<Story> with SingleTickerProviderStateMixin {
 
   void _switchToNextOrFinish() {
     _controller.stop();
-    if (_currentIdx + 1 >= widget.momentCount &&
-        widget.onFlashForward != null) {
-      widget.onFlashForward();
+    if (_currentIdx + 1 >= widget.momentCount && widget.onFlashForward != null) {
+      widget.onFlashForward();    
     } else if (_currentIdx + 1 < widget.momentCount) {
       _controller.reset();
       setState(() => _currentIdx += 1);
@@ -182,9 +186,12 @@ class _StoryState extends State<Story> with SingleTickerProviderStateMixin {
     } else if (_currentIdx == widget.momentCount - 1) {
       setState(() => _currentIdx = widget.momentCount);
     }
+
+    widget.onNext(_currentIdx);
   }
 
   void _switchToPrevOrFinish() {
+
     _controller.stop();
     if (_currentIdx - 1 < 0 && widget.onFlashBack != null) {
       widget.onFlashBack();
@@ -196,6 +203,8 @@ class _StoryState extends State<Story> with SingleTickerProviderStateMixin {
       _controller.duration = widget.momentDurationGetter(_currentIdx);
       _controller.forward();
     }
+
+    widget.onPreview(_currentIdx);
   }
 
   void _onTapDown(TapDownDetails details) => _controller.stop();
